@@ -5,7 +5,10 @@
 
 ## User resource
 Register, retrieve and authenticate a User
-> http://localhost:8080/user
+> http://localhost:8080/user  
+> 
+> POST
+> {"userName}
 
 ## Open API Definition
-> http://localhost:9090/openapi
+> http://localhost:8080/openapi
