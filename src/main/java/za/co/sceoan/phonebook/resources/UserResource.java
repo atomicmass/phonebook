@@ -21,6 +21,7 @@ import za.co.sceoan.phonebook.dto.User;
 @Path("/v1/user")
 public class UserResource {
 
+    
     @Inject
     private UserManager manager;
 
