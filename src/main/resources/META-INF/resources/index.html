@@ -2,8 +2,9 @@
 <html>
 
 <head>
-    <title>To Do API Client Demo</title>
+    <title>Phonebook</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
     <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
     <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
@@ -11,43 +12,40 @@
 </head>
 
 <body>
-    <div class="navbar">
+    <div id="nav" class="navbar">
         <div class="navbar-inner">
-            <a class="brand" href="#">Users</a>
+            <a class="brand" href="#">Phonebook</a>
+            <span data-bind="visible: !authenticated()">
+                <button data-bind="click: showRegister" class="btn">Register</button>
+                <button data-bind="click: showLogin" class="btn">Login</button>
+            </span>
+            <span data-bind="visible: authenticated()">
+                <button data-bind="click: logout" class="btn">Logout</button>
+            </span>
         </div>
+
+    </div>
+
+    <div id="message" class="hide alert alert-error" role="alert">
+        <p data-bind="text: warning"></p>
     </div>
 
     <div id="main" class="container">
-        <button data-bind="click: showRegister" class="btn">Register</button>
-        <!--[{"id":1,"email":"sceoan@gmail.com","name":"sean","role":"ADMIN"}]-->
-        <table class="table table-striped">
-            <tr>
-                <th>Users</th>
-                <th>Actions</th>
-            </tr>
-
-            <!-- ko foreach: tasks -->
-            <tr>
-                <td>
-                    <p><b data-bind="text: name"></b></p>
-                    <p data-bind="text: email"></p>
-                    <p data-bind="text: role"></p>
-                </td>
-                <td>
-                    <button data-bind="click: $parent.beginEdit" class="btn">Edit</button>
-                </td>
-            </tr>
-            <!-- /ko -->
-
-        </table>
+        <p>
+            Welcome to the phonebook application. Register or login to proceeed.
+        </p>
 
     </div>
 
-    <div id="add" class="modal hide fade" tabindex="1" role="dialog" aria-labelledby="addDialogLabel"
+    <div id="phonebook" class="hide container">
+        
+    </div>
+
+    <div id="register" class="modal hide fade" tabindex="1" role="dialog" aria-labelledby="registerDialogLabel"
         aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="addDialogLabel">Register new user</h3>
+            <h3 id="registerDialogLabel">Register new user</h3>
         </div>
         <div class="modal-body">
             <form class="form-horizontal">
@@ -87,15 +85,17 @@
         <div class="modal-body">
             <form class="form-horizontal">
                 <div class="control-group">
-                    <label class="control-label" for="inputLoginEmail">Username</label>
+                    <label class="control-label" for="inputLoginEmail">Email</label>
                     <div class="controls">
-                        <input data-bind="value: username" type="text" id="inputLoginEmail" placeholder="Email" autocomplete="email">
+                        <input data-bind="value: email" type="text" id="inputLoginEmail" placeholder="Email"
+                            autocomplete="email">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="inputLoginPassword">Password</label>
                     <div class="controls">
-                        <input data-bind="value: password" type="password" id="inputLoginPassword" placeholder="Password" autocomplete="current-password">
+                        <input data-bind="value: password" type="password" id="inputLoginPassword"
+                            placeholder="Password" autocomplete="current-password">
                     </div>
                 </div>
             </form>
@@ -106,37 +106,81 @@
         </div>
     </div>
 
-
-
-
-
     <script type="text/javascript">
 
-        function RegisterViewModel() {
+        function RegisterVM() {
             var self = this;
             self.email = ko.observable();
             self.password = ko.observable();
             self.name = ko.observable();
 
             self.register = function () {
-                $('#add').modal('hide');
-                tasksViewModel.add({
+                $('#register').modal('hide');
+                serviceVM.register({
                     email: self.email(),
                     password: self.password(),
                     name: self.name()
                 });
                 self.email("");
                 self.password("");
-                seld.name("");
+                self.name("");
             }
         }
 
-
-        function ServiceViewModel() {
+        function LoginVM() {
             var self = this;
-            self.tasksURI = 'http://localhost:9001/user';
-            self.serviceUsername = "miguel";
-            self.servicepassword = "python";
+            self.email = ko.observable();
+            self.password = ko.observable();
+
+            self.login = function () {
+                $('#login').modal('hide');
+                serviceVM.login({
+                    email: self.email(),
+                    password: self.password()
+                });
+                self.email("");
+                self.password("");
+            }
+        }
+
+        function MessageVM() {
+            var self = this;
+            self.error = ko.observable();
+            self.warning = ko.observable();
+
+            self.showWarning = function (warn) {
+                self.warning(warn);
+                $('#message').fadeIn(400).delay(5000).fadeOut(400);
+            }
+        }
+
+        function NavVM() {
+            var self = this;
+            self.authenticated = ko.observable(false);
+            self.showRegister = function (data) {
+                $('#register').modal('show');
+            }
+
+            self.showLogin = function (data) {
+                $('#login').modal('show');
+            }
+
+            self.loggedIn = function (bl) {
+                self.authenticated(bl);
+            }
+
+            self.logout = function () {
+                self.authenticated(false);
+                serviceVM.logout();
+            }
+        }
+
+        function ServiceVM() {
+            var self = this;
+            self.userUri = 'http://localhost:9001/phonebook/api/v1/user';
+            self.loginUri = self.userUri + "/login";
+            self.serviceUsername = "";
+            self.servicePassword = "";
             self.tasks = ko.observableArray();
 
             self.ajax = function (uri, method, data) {
@@ -144,47 +188,55 @@
                     url: uri,
                     type: method,
                     contentType: "application/json",
-                    accept: "application/json",
                     cache: false,
                     dataType: 'json',
                     data: JSON.stringify(data),
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("Authorization",
-                            "Basic " + btoa(self.serviceUsername + ":" + self.servicepassword));
+                            "Basic " + btoa(self.serviceUsername + ":" + self.servicePassword));
                     },
-                    error: function (jqXHR) {
-                        console.log("ajax error " + jqXHR.status);
+                    error: function (err) {
+                        console.log("ajax error " + err.status + " " + err.statusText);
+                        messageVM.showWarning(err.responseText);
                     }
                 };
                 return $.ajax(request);
             }
 
-            self.beginEdit = function (task) {
-                task.name(task.name() + "d");
+            self.register = function (user) {
+                self.ajax(self.userUri, "POST", user).done(function (data) {
+                    self.login(user);
+                });
             }
 
-            self.showRegister = function (task) {
-                $('#add').modal('show');
+            self.logout = function () {
+                self.serviceUsername = "";
+                self.servicePassword = "";
+                $('#phonebook').hide();
+                $('#main').show();
             }
 
-            self.ajax(self.tasksURI, 'GET').done(function (data) {
-
-                for (var i = 0; i < data.length; i++) {
-
-                    self.tasks.push({
-                        id: ko.observable(data[i].id),
-                        name: ko.observable(data[i].name),
-                        email: ko.observable(data[i].email),
-                        role: ko.observable(data[i].role)
-                    });
-                }
-            });
+            self.login = function (user) {
+                self.ajax(self.loginUri, "POST", user).done(function (data) {
+                    navVM.loggedIn(true);
+                    self.serviceUsername = user.email;
+                    self.servicePassword = user.password;
+                    $('#main').hide();
+                    $('#phonebook').show();
+                });
+            }
         }
 
-        var serviceVM = new ServiceViewModel();
-        var registerVM = new RegisterViewModel();
+        var serviceVM = new ServiceVM();
+        var registerVM = new RegisterVM();
+        var navVM = new NavVM();
+        var messageVM = new MessageVM();
+        var loginVM = new LoginVM();
         ko.applyBindings(serviceVM, $('#main')[0]);
-        ko.applyBindings(registerVM, $('#add')[0]);
+        ko.applyBindings(registerVM, $('#register')[0]);
+        ko.applyBindings(navVM, $('#nav')[0]);
+        ko.applyBindings(messageVM, $('#message')[0]);
+        ko.applyBindings(loginVM, $('#login')[0]);
 
 
     </script>

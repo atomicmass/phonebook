@@ -7,21 +7,19 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+/**
+ * Combined DTO and DAO for User data
+ */
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User extends PanacheEntity implements Serializable {
-    
-    public enum Role {
-        USER, ADMIN
-    }
-
-    @NotBlank(message = "[password] may not be blank")
+    @NotBlank(message = "Password may not be blank")
     private String password;
-    @NotBlank(message = "[email] may not be blank")
+    @NotBlank(message = "Email may not be blank")
     private String email;
-    @NotBlank(message = "[name] may not be blank")
+    @NotBlank(message = "Name may not be blank")
     private String name;
-    private Role role;
+    private String role;
 
     public static User findByEmail(String email) {
         return find("email", email).firstResult();
@@ -51,11 +49,11 @@ public class User extends PanacheEntity implements Serializable {
         this.name = name;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
