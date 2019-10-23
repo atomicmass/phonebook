@@ -67,6 +67,13 @@ function ServiceVM() {
         });
     }
 
+    self.listContacts = function(initial) {
+        var uri = self.initialUri + "/" + initial;
+        self.ajax(uri, "GET").done(function (data) {
+            phonebookVM.bindContacts(data);
+        });
+    }
+
     self.saveContact = function (contact) {
         self.ajax(self.phonebookUri, "POST", contact).done(function (data) {self.listInitials();});
     }

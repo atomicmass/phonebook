@@ -1,7 +1,7 @@
 function LoginVM() {
     var self = this;
-    self.email = ko.observable();
-    self.password = ko.observable();
+    self.email = ko.observable("sceoan@gmail.com");
+    self.password = ko.observable("bleh");
 
     self.login = function () {
         $('#login').modal('hide');

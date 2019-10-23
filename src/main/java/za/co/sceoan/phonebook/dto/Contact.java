@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Contact extends PanacheEntity implements Serializable {
+public class Contact extends PanacheEntity implements Serializable, Comparable<Contact> {
 
     @NotBlank(message = "Name may not be blank")
     private String name;
@@ -55,7 +55,7 @@ public class Contact extends PanacheEntity implements Serializable {
      */
     public static Stream<Contact> streamByOwner(String ownerEmail) {
         Stream<Contact> contacts = streamAll();
-        return contacts.filter(t -> t.getOwnerEmail().equalsIgnoreCase(ownerEmail));
+        return contacts.filter(t -> t.getOwnerEmail().equalsIgnoreCase(ownerEmail)).sorted();
     }
 
     /**
@@ -117,5 +117,10 @@ public class Contact extends PanacheEntity implements Serializable {
     public boolean matches(String regex) {
         String r = String.format(".*%s.*", regex.toLowerCase());
         return name.toLowerCase().matches(r) || email.toLowerCase().matches(r) || phone.toLowerCase().matches(r);
+    }
+
+    @Override
+    public int compareTo(Contact o) {
+        return name.compareTo(o.name);
     }
 }

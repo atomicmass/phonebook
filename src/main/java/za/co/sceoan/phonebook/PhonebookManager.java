@@ -103,11 +103,20 @@ public class PhonebookManager {
      * @param ownerEmail Email of user who owns the contact
      * @param id ID of the contact to delete
      */
+    @Transactional
     public void delete(String ownerEmail, Long id) {
         Contact c = find(ownerEmail, id);
         if (c != null) {
             c.delete();
         }
+    }
+
+    /**
+     * Admin function to clear out all contacts
+     */
+    @Transactional
+    public void deleteAll() {
+        Contact.deleteAll();
     }
 
 }

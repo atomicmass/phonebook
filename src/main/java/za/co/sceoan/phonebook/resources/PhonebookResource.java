@@ -94,4 +94,12 @@ public class PhonebookResource extends Resource {
         manager.delete(email(), id);
         return Response.ok().build();
     }
+    
+    @DELETE
+    @RolesAllowed({"ADMIN"})
+    @Path("/all")
+    public Response delete() {
+        manager.deleteAll();
+        return Response.ok().build();
+    }
 }

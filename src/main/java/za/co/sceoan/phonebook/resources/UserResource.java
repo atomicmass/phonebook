@@ -25,7 +25,7 @@ public class UserResource extends Resource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @PermitAll
+    @RolesAllowed("ADMIN")
     public Response getUsers(@Context SecurityContext securityContext) {
         return Response.ok(manager.retrieveAllUsers()).build();
     }
