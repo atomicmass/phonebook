@@ -19,11 +19,9 @@ import za.co.sceoan.phonebook.dto.Message;
 import za.co.sceoan.phonebook.dto.User;
 
 @Path("/v1/user")
-public class UserResource {
-
-    
+public class UserResource extends Resource {
     @Inject
-    private UserManager manager;
+    UserManager manager;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

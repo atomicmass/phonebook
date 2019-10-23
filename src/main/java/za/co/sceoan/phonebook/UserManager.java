@@ -15,7 +15,7 @@ import za.co.sceoan.phonebook.dto.User;
 public class UserManager {
 
     @Inject
-    private Validator validator;
+    Validator validator;
     private final Map<String, User> userCache;
     
     public UserManager() {

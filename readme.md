@@ -5,10 +5,10 @@
 
 ## User resource
 Register, retrieve and authenticate a User
-> http://localhost:8080/user  
+> http://localhost:9001/phonebook/api/v1/user  
 > 
 > POST
 > {"userName}
 
 ## Open API Definition
-> http://localhost:8080/openapi
+> http://localhost:9001/openapi

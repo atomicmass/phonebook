@@ -2,7 +2,9 @@ package za.co.sceoan.phonebook.dto;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.persistence.Entity;
@@ -17,7 +19,7 @@ public class Contact extends PanacheEntity implements Serializable {
     private String phone;
     private String initial;
     private String ownerEmail;
-
+    
     public String getName() {
         return name;
     }
@@ -67,6 +69,15 @@ public class Contact extends PanacheEntity implements Serializable {
                 .filter(t -> t.getInitial().equalsIgnoreCase(initial))
                 .collect(Collectors.toList());
     }
+    
+    /**
+     * List all contacts associated with an owner
+     * @param ownerEmail
+     * @return 
+     */
+    public static List<Contact> listAll(String ownerEmail) {
+        return streamByOwner(ownerEmail).collect(Collectors.toList());
+    }
 
     /**
      * List all contacts matching a name
@@ -86,9 +97,9 @@ public class Contact extends PanacheEntity implements Serializable {
      * @return 
      */
     public static List<String> listInitials(String ownerEmail) {
-        Stream<Contact> contacts = Contact
-                .find("select distinct initial from Contact where ownerEmail = ?1", ownerEmail).stream();
-        return contacts.map(Contact::getInitial).collect(Collectors.toList());
+        Set<String> initials = new HashSet<>();
+        streamByOwner(ownerEmail).forEach(t -> initials.add(t.getInitial().toUpperCase()));
+        return initials.stream().sorted().collect(Collectors.toList());
     }
 
     public void setInitial(String initial) {
@@ -101,5 +112,10 @@ public class Contact extends PanacheEntity implements Serializable {
 
     public void setOwnerEmail(String ownerEmail) {
         this.ownerEmail = ownerEmail;
+    }
+
+    public boolean matches(String regex) {
+        String r = String.format(".*%s.*", regex.toLowerCase());
+        return name.toLowerCase().matches(r) || email.toLowerCase().matches(r) || phone.toLowerCase().matches(r);
     }
 }
