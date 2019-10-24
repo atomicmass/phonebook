@@ -77,4 +77,9 @@ function ServiceVM() {
     self.saveContact = function (contact) {
         self.ajax(self.phonebookUri, "POST", contact).done(function (data) {self.listInitials();});
     }
+
+    self.deleteContact = function(id) {
+        var uri = self.phonebookUri + "/" + id;
+        return self.ajax(uri, "DELETE");
+    }
 }

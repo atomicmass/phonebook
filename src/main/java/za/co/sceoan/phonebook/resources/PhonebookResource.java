@@ -92,7 +92,7 @@ public class PhonebookResource extends Resource {
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
         manager.delete(email(), id);
-        return Response.ok().build();
+        return Response.ok(new Message("Success")).build();
     }
     
     @DELETE
@@ -100,6 +100,6 @@ public class PhonebookResource extends Resource {
     @Path("/all")
     public Response delete() {
         manager.deleteAll();
-        return Response.ok().build();
+        return Response.ok(new Message("Success")).build();
     }
 }

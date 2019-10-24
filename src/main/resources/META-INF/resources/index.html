@@ -47,6 +47,9 @@
 
     <div id="phonebook" class="hide container">
         <p>
+            <input id="search" type="text" class="search-query" placeholder="Search" >
+        </p>
+        <p>
             <ul class="nav nav-pills">
                 <!-- ko foreach: initials -->
                 <li data-bind="class: className">
@@ -63,16 +66,18 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>Delete</th>
             </tr>
             <!-- ko foreach: contacts -->
             <tr>
                 <td data-bind="text: name"></td>
                 <td data-bind="text: email"></td>
                 <td data-bind="text: phone"></td>
+                <td><button data-bind="click: $parent.delete" class="btn btn-danger">Delete</button></td>
             </tr>
             <!-- /ko -->
         </table>
-
+        <button id="undoBtn" data-bind="click: undo" class="hide btn btn-primary">Undo Delete</button>
     </div>
 
     <div id="register" class="modal hide fade" tabindex="1" role="dialog" aria-labelledby="registerDialogLabel"

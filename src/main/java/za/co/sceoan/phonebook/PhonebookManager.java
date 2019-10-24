@@ -12,10 +12,9 @@ import za.co.sceoan.phonebook.dto.Contact;
 
 @ApplicationScoped
 public class PhonebookManager {
-
     @Inject
     Validator validator;
-
+    
     /**
      * Persist contact to DB. Performs validations on contact details first.
      *
@@ -45,9 +44,10 @@ public class PhonebookManager {
 
     /**
      * Lilst all contacts belonging to owner with the matching initial
+     *
      * @param ownerEmail Email of user who owns the contact
      * @param initial Initial letter of contact name
-     * @return 
+     * @return
      */
     public List<Contact> listByInitial(String ownerEmail, String initial) {
         return Contact.listByInitial(ownerEmail, initial);
@@ -55,8 +55,9 @@ public class PhonebookManager {
 
     /**
      * List all the initials of the contacts belongnig to the owner
+     *
      * @param ownerEmail Email of user who owns the contact
-     * @return 
+     * @return
      */
     public List<String> listInitials(String ownerEmail) {
         return Contact.listInitials(ownerEmail);
@@ -64,8 +65,9 @@ public class PhonebookManager {
 
     /**
      * List all contacts belonginf to specified owner
+     *
      * @param ownerEmail Email of user who owns the contact
-     * @return 
+     * @return
      */
     public List<Contact> listAll(String ownerEmail) {
         return Contact.listAll(ownerEmail);
@@ -73,13 +75,14 @@ public class PhonebookManager {
 
     /**
      * Find the specific contact based on the ID
+     *
      * @param ownerEmail Email of user who owns the contact
      * @param id ID of record to find
-     * @return 
+     * @return
      */
     public Contact find(String ownerEmail, Long id) {
         Contact c = Contact.findById(id);
-        if (c.getEmail().equalsIgnoreCase(ownerEmail)) {
+        if (c.getOwnerEmail().equalsIgnoreCase(ownerEmail)) {
             return c;
         }
         return null;
@@ -100,6 +103,7 @@ public class PhonebookManager {
 
     /**
      * Delete the specified contact
+     *
      * @param ownerEmail Email of user who owns the contact
      * @param id ID of the contact to delete
      */
@@ -118,5 +122,4 @@ public class PhonebookManager {
     public void deleteAll() {
         Contact.deleteAll();
     }
-
 }

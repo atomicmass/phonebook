@@ -20,6 +20,16 @@ public class Contact extends PanacheEntity implements Serializable, Comparable<C
     private String initial;
     private String ownerEmail;
     
+    public Contact() {}
+    
+    public Contact(Contact con) {
+        name = con.getName();
+        email = con.getEmail();
+        phone = con.getPhone();
+        initial = con.getInitial();
+        ownerEmail = con.getOwnerEmail();
+    }
+    
     public String getName() {
         return name;
     }
@@ -123,4 +133,6 @@ public class Contact extends PanacheEntity implements Serializable, Comparable<C
     public int compareTo(Contact o) {
         return name.compareTo(o.name);
     }
+    
+    
 }

@@ -6,6 +6,7 @@ function PhonebookVM() {
     self.initials = ko.observableArray();
     self.contacts = ko.observableArray();
     self.currentInitial = ko.observable();
+    self.prevDeleted = [];
 
     self.saveContact = function () {
         $('#addContact').modal('hide');
@@ -31,7 +32,7 @@ function PhonebookVM() {
                 className: ko.observable("")
             });
         }
-        self.navInitial();
+        self.navInitial(self.currentInitial());
     }
 
     self.bindContacts = function (data) {
@@ -49,18 +50,45 @@ function PhonebookVM() {
 
     }
 
-
-    // todo refactor
     self.navInitial = function (data) {
-        if (data) {
-            if (self.currentInitial()) {
-                self.currentInitial().className("");
-            }
-            data.className("active");
-            self.currentInitial(data);
-        }
         if (self.currentInitial()) {
+            self.currentInitial().className("");
+        }
+        self.currentInitial(data);
+        if (data) {    
+            data.className("active");
             serviceVM.listContacts(self.currentInitial().initial());
         }
     }
+
+    self.delete = function(data) {
+        self.prevDeleted.push(data);
+        serviceVM.deleteContact(data.id())
+            .done(function (data) {
+                serviceVM.listInitials();
+            })
+            .done(function (data) {
+                $('#undoBtn').fadeIn(400);
+            });
+    }
+
+    self.undo = function(data) {
+        var last = self.prevDeleted.pop();
+        serviceVM.saveContact({
+            name: last.name(),
+            email: last.email(),
+            phone: last.phone()
+        });
+        if(self.prevDeleted.length == 0) {
+            $('#undoBtn').fadeOut(400);
+        }
+    }
+
+    self.search = function(data) {
+        console.log("txt " + $('#search').value);
+    }
+
+    $(document).ready(function() {
+        $('#search').keyup(self.search());
+    });
 }
