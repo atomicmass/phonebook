@@ -46,38 +46,69 @@
     </div>
 
     <div id="phonebook" class="hide container">
-        <p>
-            <input id="search" type="text" class="search-query" placeholder="Search" >
-        </p>
-        <p>
-            <ul class="nav nav-pills">
-                <!-- ko foreach: initials -->
-                <li data-bind="class: className">
-                    <a href="#" data-bind="text: initial, click: $parent.navInitial"></a>
-                </li>
+        <ul class="nav nav-tabs">
+            <li id="listNav" class="active">
+                <a href="#" data-bind="click: showList">List</a>
+            </li>
+            <li id="searchNav">
+                <a href="#" data-bind="click: showSearch">Search</a>
+            </li>
+        </ul>
+        <div id="phonebookList">
+            <p>
+                <ul class="nav nav-pills">
+                    <!-- ko foreach: initials -->
+                    <li data-bind="class: className">
+                        <a href="#" data-bind="text: initial, click: $parent.navInitial"></a>
+                    </li>
+                    <!-- /ko -->
+                </ul>
+            </p>
+            <p>
+                <button data-bind="click: showAddContact" class="btn">Add Contact</button>
+            </p>
+            <table class="table table-striped">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Delete</th>
+                </tr>
+                <!-- ko foreach: contacts -->
+                <tr>
+                    <td data-bind="text: name"></td>
+                    <td data-bind="text: email"></td>
+                    <td data-bind="text: phone"></td>
+                    <td><button data-bind="click: $parent.delete" class="btn btn-danger">Delete</button></td>
+                </tr>
                 <!-- /ko -->
-            </ul>
-        </p>
-        <p>
-            <button data-bind="click: showAddContact" class="btn">Add Contact</button>
-        </p>
-        <table class="table table-striped">
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Delete</th>
-            </tr>
-            <!-- ko foreach: contacts -->
-            <tr>
-                <td data-bind="text: name"></td>
-                <td data-bind="text: email"></td>
-                <td data-bind="text: phone"></td>
-                <td><button data-bind="click: $parent.delete" class="btn btn-danger">Delete</button></td>
-            </tr>
-            <!-- /ko -->
-        </table>
-        <button id="undoBtn" data-bind="click: undo" class="hide btn btn-primary">Undo Delete</button>
+            </table>
+            <button id="undoBtn" data-bind="click: undo" class="hide btn btn-primary">Undo Delete</button>
+        </div>
+        <div id="phonebookSearch" class="hide">
+            <p>
+                <input id="searchText" type="text" data-bind="value: searchString" class="search-query"
+                    placeholder="Search" autocomplete="">
+                <button data-bind="click: search" class="btn">Search</button>
+            </p>
+            <table class="table table-striped">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Delete</th>
+                </tr>
+                <!-- ko foreach: searchResults -->
+                <tr>
+                    <td data-bind="text: name"></td>
+                    <td data-bind="text: email"></td>
+                    <td data-bind="text: phone"></td>
+                    <td><button data-bind="click: $parent.delete" class="btn btn-danger">Delete</button></td>
+                </tr>
+                <!-- /ko -->
+            </table>
+        </div>
+
     </div>
 
     <div id="register" class="modal hide fade" tabindex="1" role="dialog" aria-labelledby="registerDialogLabel"

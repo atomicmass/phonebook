@@ -7,6 +7,8 @@ function PhonebookVM() {
     self.contacts = ko.observableArray();
     self.currentInitial = ko.observable();
     self.prevDeleted = [];
+    self.searchString = ko.observable();
+    self.searchResults = ko.observableArray();
 
     self.saveContact = function () {
         $('#addContact').modal('hide');
@@ -85,10 +87,33 @@ function PhonebookVM() {
     }
 
     self.search = function(data) {
-        console.log("txt " + $('#search').value);
+        serviceVM.search(self.searchString())
+            .done(function (data) {
+                self.searchResults.removeAll();
+                for (var i = 0; i < data.length; i++) {
+                self.searchResults.push({
+                        id: ko.observable(data[i].id),
+                        name: ko.observable(data[i].name),
+                        initial: ko.observable(data[i].initial),
+                        email: ko.observable(data[i].email),
+                        ownerEmail: ko.observable(data[i].ownerEmail),
+                        phone: ko.observable(data[i].phone)
+                    });
+                }
+            });
     }
 
-    $(document).ready(function() {
-        $('#search').keyup(self.search());
-    });
+    self.showSearch = function(data) {
+        $('#listNav').toggleClass("active");
+        $('#searchNav').toggleClass("active");
+        $('#phonebookList').hide();
+        $('#phonebookSearch').show();
+    }
+
+    self.showList = function(data) {
+        $('#listNav').toggleClass("active");
+        $('#searchNav').toggleClass("active");
+        $('#phonebookList').show();
+        $('#phonebookSearch').hide();
+    }
 }

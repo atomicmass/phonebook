@@ -5,6 +5,7 @@ function ServiceVM() {
     self.loginUri = self.userUri + "/login";
     self.phonebookUri = self.baseUri +"/phonebook";
     self.initialUri = self.phonebookUri + "/initial";
+    self.searchUri = self.phonebookUri + "/search?s=";
     self.serviceUsername = "";
     self.servicePassword = "";
     self.tasks = ko.observableArray();
@@ -81,5 +82,10 @@ function ServiceVM() {
     self.deleteContact = function(id) {
         var uri = self.phonebookUri + "/" + id;
         return self.ajax(uri, "DELETE");
+    }
+
+    self.search = function(str) {
+        var uri = self.searchUri + str;
+        return self.ajax(uri, "GET");
     }
 }
