@@ -21,6 +21,15 @@ public class User extends PanacheEntity implements Serializable {
     private String name;
     private String role;
 
+    public User() {
+    }
+
+    public User(String password, String email, String name) {
+        this.password = password;
+        this.email = email;
+        this.name = name;
+    }
+
     public static User findByEmail(String email) {
         return find("email", email).firstResult();
     }
