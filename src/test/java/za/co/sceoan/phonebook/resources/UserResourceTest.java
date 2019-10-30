@@ -5,38 +5,60 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import java.util.UUID;
-import static org.hamcrest.CoreMatchers.is;
-import org.junit.jupiter.api.BeforeAll;
-import za.co.sceoan.phonebook.dto.User;
+import org.junit.jupiter.api.BeforeEach;
 
 @QuarkusTest
 public class UserResourceTest {
 
-    private static final String TEST_EMAIL = UUID.randomUUID() + "@test.com";
+    private static final String EMAIL = UUID.randomUUID() + "@test.com";
     private static final String PASSWORD = UUID.randomUUID().toString();
-    
-    @BeforeAll
-    private static void beforeAll() {
-        
+    private static final String NAME = "TEST";
+    private static final String USER = "{\"email\":\"" + EMAIL + "\",\"password\":\"" + PASSWORD + "\",\"name\":\"" + NAME + "\"}";
+
+    @BeforeEach
+    public void register() {
+        given()
+                .when()
+                .contentType("application/json")
+                .body(USER)
+                .post("/phonebook/api/v1/user");
+    }
+
+    @Test
+    public void login() {
+        given()
+                .contentType("application/json")
+                .body(USER)
+                .when().post("/phonebook/api/v1/user/login")
+                .then()
+                .statusCode(200);
     }
     
     @Test
-    public void testSuccessfulRegister() {
-        User u = new User(PASSWORD, TEST_EMAIL, "TEST");
-        
+    public void failGetAll() {
         given()
-          .when().post("/phonebook/v1/user", u)
-          .then()
-             .statusCode(200);
+                .auth()
+                .preemptive()
+                .basic(EMAIL, PASSWORD)
+                .contentType("application/json")
+                .body(USER)
+                .when().get("/phonebook/api/v1/user")
+                .then()
+                .statusCode(403); //not authorised
     }
     
     @Test
-    public void testSuccessfulRetrieveUsers() {
+    public void successGetAll() {
+        //TODO - better wway to handle admin user for this test
         given()
-          .when().get("/phonebook/v1/user")
-          .then()
-             .statusCode(200)
-             .body(is("hello"));
+                .auth()
+                .preemptive()
+                .basic("sceoan@gmail.com", "bleh")
+                .contentType("application/json")
+                .body(USER)
+                .when().get("/phonebook/api/v1/user")
+                .then()
+                .statusCode(200); 
     }
 
 }
