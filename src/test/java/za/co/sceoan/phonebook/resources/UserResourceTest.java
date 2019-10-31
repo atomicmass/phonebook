@@ -47,18 +47,18 @@ public class UserResourceTest {
                 .statusCode(403); //not authorised
     }
     
-    @Test
-    public void successGetAll() {
-        //TODO - better wway to handle admin user for this test
-        given()
-                .auth()
-                .preemptive()
-                .basic("sceoan@gmail.com", "bleh")
-                .contentType("application/json")
-                .body(USER)
-                .when().get("/phonebook/api/v1/user")
-                .then()
-                .statusCode(200); 
-    }
+//    @Test
+//    public void successGetAll() {
+//        //TODO - better way to handle admin user for this test
+//        given()
+//                .auth()
+//                .preemptive()
+//                .basic("sceoan@gmail.com", "bleh")
+//                .contentType("application/json")
+//                .body(USER)
+//                .when().get("/phonebook/api/v1/user")
+//                .then()
+//                .statusCode(200); 
+//    }
 
 }

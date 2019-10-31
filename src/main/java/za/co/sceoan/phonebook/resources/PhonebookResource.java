@@ -82,7 +82,7 @@ public class PhonebookResource extends Resource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/search")
-    public Response getById(@QueryParam("s") String regex) {
+    public Response search(@QueryParam("s") String regex) {
         List<Contact> c = manager.search(email(), regex);
         return Response.ok(c).build();
     }

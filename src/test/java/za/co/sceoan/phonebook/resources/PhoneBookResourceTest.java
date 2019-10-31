@@ -3,6 +3,7 @@ package za.co.sceoan.phonebook.resources;
 import io.quarkus.test.junit.QuarkusTest;
 import static io.restassured.RestAssured.given;
 import java.util.UUID;
+import static org.hamcrest.CoreMatchers.containsString;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,10 +32,21 @@ public class PhoneBookResourceTest {
                 .basic(EMAIL, PASSWORD)
                 .contentType("application/json")
                 .body(CONTACT)
-                .when().get("/phonebook/api/v1/phonebook")
+                .when().post("/phonebook/api/v1/phonebook")
                 .then()
                 .statusCode(200);
-        
-        
+    }
+    
+    @Test
+    public void testSearch() {
+        given()
+                .auth()
+                .preemptive()
+                .basic(EMAIL, PASSWORD)
+                .when().get("/phonebook/api/v1/phonebook/search?s=TEST")
+                .then()
+                .statusCode(200)
+                .assertThat()
+                .body(containsString("TEST"));
     }
 }
