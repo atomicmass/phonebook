@@ -11,6 +11,16 @@ function PhonebookVM() {
     self.searchResults = ko.observableArray();
 
     self.saveContact = function () {
+        var valid = true;
+        valid = required(self.contactName(), $("#cgContactName")) && valid;
+        valid = required(self.contactEmail(), $("#cgContactEmail")) && valid;
+        valid = required(self.contactPhone(), $("#cgContactPhone")) && valid;
+
+        if(!valid) {
+            return;
+        }
+
+
         $('#addContact').modal('hide');
         serviceVM.saveContact({
             name: self.contactName(),

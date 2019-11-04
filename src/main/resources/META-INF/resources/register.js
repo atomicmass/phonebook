@@ -5,6 +5,16 @@ function RegisterVM() {
     self.name = ko.observable();
 
     self.register = function () {
+
+        var valid = true;
+        valid = required(self.name(), $("#cgRegisterName")) && valid;
+        valid = required(self.email(), $("#cgRegisterEmail")) && valid;
+        valid = required(self.password(), $("#cgRegisterPassword")) && valid;
+
+        if(!valid) {
+            return;
+        }
+
         $('#register').modal('hide');
         serviceVM.register({
             email: self.email(),

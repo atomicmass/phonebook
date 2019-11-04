@@ -4,6 +4,15 @@ function LoginVM() {
     self.password = ko.observable("");//bleh");
 
     self.login = function () {
+
+        var valid = true;
+        valid = required(self.email(), $("#cgLoginEmail")) && valid;
+        valid = required(self.password(), $("#cgLoginPassword")) && valid;
+
+        if(!valid) {
+            return;
+        }
+        
         $('#login').modal('hide');
         serviceVM.login({
             email: self.email(),

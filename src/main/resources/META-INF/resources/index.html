@@ -17,6 +17,8 @@
         <script src="login.js"></script>
         <script src="register.js"></script>
         <script src="phonebook.js"></script>
+        <script src="validation.js"></script>
+
     </head>
 
     <body>
@@ -117,21 +119,21 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
-                    <div class="control-group">
+                    <div id="cgRegisterName" class="control-group">
                         <label class="control-label" for="inputName">Name</label>
                         <div class="controls">
                             <input data-bind="value: name" type="text" id="inputName" placeholder="Name" autocomplete="name"
                                    style="width: 150px;">
                         </div>
                     </div>
-                    <div class="control-group">
+                    <div id="cgRegisterEmail" class="control-group">
                         <label class="control-label" for="inputEmail">Email</label>
                         <div class="controls">
                             <input data-bind="value: email" type="text" id="inputEmail" autocomplete="email"
                                    placeholder="Email" style="width: 150px;">
                         </div>
                     </div>
-                    <div class="control-group">
+                    <div id="cgRegisterPassword" class="control-group">
                         <label class="control-label" for="inputPassword">Password</label>
                         <div class="controls">
                             <input data-bind="value: password" type="password" id="inputPassword"
@@ -152,14 +154,14 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
-                    <div class="control-group">
+                    <div id="cgLoginEmail" class="control-group">
                         <label class="control-label" for="inputLoginEmail">Email</label>
                         <div class="controls">
                             <input data-bind="value: email" type="text" id="inputLoginEmail" placeholder="Email"
                                    autocomplete="email">
                         </div>
                     </div>
-                    <div class="control-group">
+                    <div id="cgLoginPassword" class="control-group">
                         <label class="control-label" for="inputLoginPassword">Password</label>
                         <div class="controls">
                             <input data-bind="value: password" type="password" id="inputLoginPassword"
@@ -169,7 +171,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button data-bind="click: login" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Sign
+                <button data-bind="click: login" class="btn btn-primary" aria-hidden="true">Sign
                     In</button>
             </div>
         </div>
@@ -183,21 +185,21 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
-                    <div class="control-group">
+                    <div id="cgContactName" class="control-group">
                         <label class="control-label" for="inputContactName">Name</label>
                         <div class="controls">
                             <input data-bind="value: contactName" type="text" id="inputContactName" placeholder="Name"
                                    autocomplete="name" style="width: 150px;">
                         </div>
                     </div>
-                    <div class="control-group">
+                    <div id="cgContactEmail" class="control-group">
                         <label class="control-label" for="inputContactEmail">Email</label>
                         <div class="controls">
                             <input data-bind="value: contactEmail" type="text" id="inputContactEmail" autocomplete="email"
                                    placeholder="Email" style="width: 150px;">
                         </div>
                     </div>
-                    <div class="control-group">
+                    <div id="cgContactPhone" class="control-group">
                         <label class="control-label" for="inputContactPhone">Phone</label>
                         <div class="controls">
                             <input data-bind="value: contactPhone" type="text" id="inputContactPhone"
