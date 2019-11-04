@@ -89,6 +89,7 @@ public class PhonebookResource extends Resource {
     
     @DELETE
     @RolesAllowed({"ADMIN", "USER"})
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
         manager.delete(email(), id);
