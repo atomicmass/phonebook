@@ -6,7 +6,7 @@ To compile the app and dowload all the Quarkus dependencies execute this on the 
 > mvn compile quarkus:dev
 
 ## Website
-Once the Quarkus is up brose to this address:
+Once the Quarkus is up browse to this address:
 > http://localhost:9001/index.html
 
 Users can register themselves and login thereafter.
