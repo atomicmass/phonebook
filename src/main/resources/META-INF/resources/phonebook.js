@@ -12,9 +12,15 @@ function PhonebookVM() {
 
     self.saveContact = function () {
         var valid = true;
+
+        self.contactPhone(removeSpaces(self.contactPhone()));
+
         valid = required(self.contactName(), $("#cgContactName")) && valid;
         valid = required(self.contactEmail(), $("#cgContactEmail")) && valid;
         valid = required(self.contactPhone(), $("#cgContactPhone")) && valid;
+        
+        valid = regex(self.contactEmail(), emailRegex, $("#cgContactEmail")) && valid;
+        valid = regex(self.contactPhone(), phoneRegex, $("#cgContactPhone")) && valid;
 
         if(!valid) {
             return;

@@ -10,6 +10,7 @@ function RegisterVM() {
         valid = required(self.name(), $("#cgRegisterName")) && valid;
         valid = required(self.email(), $("#cgRegisterEmail")) && valid;
         valid = required(self.password(), $("#cgRegisterPassword")) && valid;
+        valid = regex(self.email(), emailRegex, $("#cgRegisterEmail")) && valid;
 
         if(!valid) {
             return;
