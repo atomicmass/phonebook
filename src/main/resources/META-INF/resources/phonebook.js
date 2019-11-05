@@ -20,7 +20,6 @@ function PhonebookVM() {
             return;
         }
 
-
         $('#addContact').modal('hide');
         serviceVM.saveContact({
             name: self.contactName(),
@@ -56,7 +55,9 @@ function PhonebookVM() {
                 initial: ko.observable(data[i].initial),
                 email: ko.observable(data[i].email),
                 ownerEmail: ko.observable(data[i].ownerEmail),
-                phone: ko.observable(data[i].phone)
+                phone: ko.observable(data[i].phone),
+                emailLink: ko.observable("mailto:" + data[i].email),
+                phoneLink: ko.observable("tel:" + data[i].phone)
             });
         }
 
